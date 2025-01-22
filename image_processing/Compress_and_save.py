@@ -90,8 +90,6 @@ def chroma_downsampling(image):
     return downsampled_image
 
 
-
-
 def apply_compression(image, file_extension):
     """Apply compression based on the user-selected format and parameters."""
     if file_extension.lower() == '.jpg':

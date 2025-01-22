@@ -1,7 +1,7 @@
 import cv2
 
-def convert_to_black_and_white(image, threshold_value=127):
-
+def convert_to_black_and_white(image):
+    threshold_value = int(input("Threshold value(normally: 127): "))
     # Convert the image to grayscale
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
