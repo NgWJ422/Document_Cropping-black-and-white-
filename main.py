@@ -9,30 +9,28 @@ def main():
         # Upload an image
         try:
             image_BRG, filepath = ip.upload_image()
-            ip.Display(image_BRG)
         except Exception as e:
-            print(e)
             print("Program canceled.")
             return  # Exit the program gracefully
 
+        # Crop the image
+        cropped_image, filepath = ip.ImgCrop(image_BRG, filepath)
+        if cropped_image.size <= 0:
+            continue
+
         # Convert the image to grayscale/Black and White
-        image = ip.ChangeWhich(image_BRG)
-        ip.Display(image)
+        cropped_image = ip.ChangeWhich(cropped_image)
+        ip.Display(cropped_image)
 
         # Denoise the image
-        image = ip.Denoise(image)
-        ip.Display(image)
+        cropped_image = ip.Denoise(cropped_image)
+        ip.Display(cropped_image)
 
         # Enhance the image
-        image = ip.Enhance(image)
-        ip.Display(image)
+        cropped_image = ip.Enhance(cropped_image)
+        ip.Display(cropped_image)
 
-        # Crop the image
-        cropped_image, filepath = ip.ImgCrop(image, filepath)
-        if cropped_image.size > 0:
-            break
-        else:
-            continue
+        break
 
     ip.compress_and_save(cropped_image, filepath)
 

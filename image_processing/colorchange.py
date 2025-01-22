@@ -37,7 +37,7 @@ def convert_to_grayscale(image):
     return grayscale_BRG_image
 
 def changeWhich(image):
-    print("""
+    prompt = """
           
 Which color change would you like to make?
     1. Convert to Black and White
@@ -45,8 +45,8 @@ Which color change would you like to make?
     3. Convert to Grayscale
           
 Please enter the number of your choice.
-    """)
-    choice = input()
+    """
+    choice = input(prompt)
     if choice == "1":
         return convert_to_black_and_white(image)
     elif choice == "2":

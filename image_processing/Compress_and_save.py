@@ -21,28 +21,76 @@ def getImagefilesize(image):
     return file_size
 
 def chroma_downsampling(image):
-    """Apply chroma downsampling to reduce chroma resolution."""
+    """
+    Apply chroma downsampling based on user-specified ratio.
+    
+    Args:
+        image (numpy.ndarray): Input BGR image.
+    
+    Returns:
+        numpy.ndarray: Chroma downsampled image.
+    """
+    # Prompt the user to choose a chroma subsampling ratio
+    prompt = """
+    Choose a chroma subsampling ratio:
+    1. 4:4:4 (No subsampling)
+    2. 4:2:2 (Horizontal chroma subsampling)
+    3. 4:2:0 (Horizontal and vertical chroma subsampling)
+    4. 4:1:1 (Extreme horizontal chroma subsampling)
+    Enter your choice (1/2/3/4): 
+    """
+    choice = input(prompt)
+    
+    # Map user choice to subsampling ratio
+    ratio_map = {
+        "1": "4:4:4",
+        "2": "4:2:2",
+        "3": "4:2:0",
+        "4": "4:1:1"
+    }
+    ratio = ratio_map.get(choice)
+    if not ratio:
+        raise ValueError("Invalid choice. Please select a valid option.")
+    
     # Convert to YCbCr color space
     ycrcb = cv2.cvtColor(image, cv2.COLOR_BGR2YCrCb)
     
     # Split the Y, Cb, Cr channels
     y, cb, cr = cv2.split(ycrcb)
     
-    # Downsample Cb and Cr by 2 (you can adjust the factor as needed)
-    cb_downsampled = cv2.pyrDown(cb)
-    cr_downsampled = cv2.pyrDown(cr)
+    if ratio == "4:4:4":
+        # No subsampling
+        cb_downsampled, cr_downsampled = cb, cr
     
-    # Upsample back to original size
-    cb_upsampled = cv2.pyrUp(cb_downsampled, dstsize=(cb.shape[1], cb.shape[0]))
-    cr_upsampled = cv2.pyrUp(cr_downsampled, dstsize=(cr.shape[1], cr.shape[0]))
+    elif ratio == "4:2:2":
+        # Horizontal downsampling of chroma channels
+        cb_downsampled = cb[:, ::2]
+        cr_downsampled = cr[:, ::2]
     
-    # Merge the Y channel with the downsampled Cb and Cr channels
+    elif ratio == "4:2:0":
+        # Horizontal and vertical downsampling of chroma channels
+        cb_downsampled = cb[::2, ::2]
+        cr_downsampled = cr[::2, ::2]
+    
+    elif ratio == "4:1:1":
+        # Reduce horizontal resolution of chroma channels to 1/4th
+        cb_downsampled = cb[:, ::4]
+        cr_downsampled = cr[:, ::4]
+    
+    # Upsample chroma channels back to original size
+    cb_upsampled = cv2.resize(cb_downsampled, (cb.shape[1], cb.shape[0]), interpolation=cv2.INTER_LINEAR)
+    cr_upsampled = cv2.resize(cr_downsampled, (cr.shape[1], cr.shape[0]), interpolation=cv2.INTER_LINEAR)
+    
+    # Merge the Y channel with the upsampled Cb and Cr channels
     ycrcb_downsampled = cv2.merge([y, cb_upsampled, cr_upsampled])
     
     # Convert back to BGR color space
     downsampled_image = cv2.cvtColor(ycrcb_downsampled, cv2.COLOR_YCrCb2BGR)
     
     return downsampled_image
+
+
+
 
 def apply_compression(image, file_extension):
     """Apply compression based on the user-selected format and parameters."""
