@@ -135,27 +135,31 @@ def save_image(image, original_path, file_extension):
         print("Save operation canceled.")
 
 
-def compress_and_save(image, original_path):
+def compress_and_save(image, original_path, files_extension = None):
     """Main function to ask the user for compression settings and save the image."""
+    
     while True:
+        file_extension = files_extension
         # Prompt for file format to save
-        file_extension = input("""
-        Enter the image format to save (e.g., .jpg, .png, .jpg_chroma for chroma downsampling):
-        1. .jpg
-        2. .png
-        3. .jpg_chroma (for chroma downsampling)
-        Please enter the number corresponding to your choice: """)
-        
-        # Map user input to file extension
-        if file_extension == '1':
-            file_extension = '.jpg'
-        elif file_extension == '2':
-            file_extension = '.png'
-        elif file_extension == '3':
-            file_extension = '.jpg_chroma'
-        else:
-            print("Invalid choice, using .jpg as default.")
-            file_extension = '.jpg'
+        if(file_extension is None):
+            number = input("""
+            Enter the image format to save (e.g., .jpg, .png, .jpg_chroma for chroma downsampling):
+            1. .jpg
+            2. .png
+            3. .jpg_chroma (for chroma downsampling)
+            Please enter the number corresponding to your choice: """)
+            
+            # Map user input to file extension
+            if number == '1':
+                file_extension = '.jpg'
+            elif number == '2':
+                file_extension = '.png'
+            elif number == '3':
+                file_extension = '.jpg_chroma'
+            else:
+                print("Invalid choice, using .jpg as default.")
+                file_extension = '.jpg'
+                
         # Apply compression
         compressed_image = apply_compression(image, file_extension)
 
