@@ -1,10 +1,9 @@
 ### DOCUMENT CROPPING
 DIP assignment by Ng Wei Jie, Wee Mao Phin, Hee Yee Cinn, Goh Jia Xuen
 
-## Things to talk
-1. lines of cropping change based on color or black and white
-2. organize into module
-3. inti file
+## For Dr:
+The program main1.py is the program for user, which when run will is the one that will prompt the user to select an image, then crop it, after that the program will process the image by grayscale it, and do contrast stretching. Then, the image will be compressed using JPEG compression with user's choosen quality. Finally, user can save the image. 
+
 
 ## Overview
 This project provides a complete pipeline for cropping and processing images, aimed at tasks such as document digitization or preprocessing for OCR systems. It leverages OpenCV for image manipulation and Tkinter for user interaction. The program includes modules for image uploading, cropping, denoising, enhancement, and compression.
