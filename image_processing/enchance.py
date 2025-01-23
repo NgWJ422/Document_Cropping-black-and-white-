@@ -2,10 +2,16 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-def apply_sharpening(image):
+def apply_sharpening_highpassfilter(image):
     kernel = np.array([[0, -1, 0],
                        [-1, 5,-1],
                        [0, -1, 0]])
+    return cv2.filter2D(image, -1, kernel)
+
+def apply_sharpening_unsharp(image):
+    kernel = np.array([[-1, -1, -1],
+                       [-1, 9,-1],
+                       [-1, -1, -1]])
     return cv2.filter2D(image, -1, kernel)
 
 def apply_contrast_stretching(image):

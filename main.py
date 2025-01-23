@@ -16,7 +16,8 @@ def process_image(image):
         6. Apply Non-Local Means Denoising
         7. Apply Contrast Stretching
         8. Apply Histogram Equalization
-        9. Apply Sharpening
+        9. Apply Sharpening(high pass filter)
+        10. Apply Sharpening(unsharp mask)
         Enter the number corresponding to your choice, or 'q' to quit:
         """
         choice = input(processing_prompt).strip()
@@ -38,7 +39,9 @@ def process_image(image):
         elif choice == '8':
             image = ip.apply_histogram_equalization(image)
         elif choice == '9':
-            image = ip.apply_sharpening(image)
+            image = ip.apply_sharpening_highpassfilter(image)
+        elif choice == "10":
+            image = ip.apply_sharpening_unsharp(image)
         elif choice.lower() == 'q':
             print("Exiting image processing.")
             break
